@@ -1,0 +1,45 @@
+<?php if ($totalPages > 1) { ?><nav aria-label="Paginação">
+        <ul class="pagination">
+            <?php if ($totalPages > 1 && $page > 1) { ?>
+                <li class="page-item">
+                    <a class="page-link" href="<?php echo $url . $pageVar . '=1'; ?>" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            <?php } ?>
+            <?php if (($page - 3) > 0 && ($page - 3) < $totalPages) { ?>
+                <li class="page-item">
+                    <a class="page-link" href="<?php echo $url . $pageVar . '=' . ($page - 3); ?>"><?php echo ($page - 3); ?></a>
+                </li>
+            <?php } ?>
+            <?php if (($page - 2) > 0 && ($page - 2) < $totalPages) { ?>
+                <li class="page-item">
+                    <a class="page-link" href="<?php echo $url . $pageVar . '=' . ($page - 2); ?>"><?php echo ($page - 2); ?></a>
+                </li>
+            <?php } ?>
+            <?php if (($page - 1) > 0 && ($page - 1) < $totalPages) { ?>
+                <li class="page-item">
+                    <a class="page-link" href="<?php echo $url . $pageVar . '=' . ($page - 1); ?>"><?php echo ($page - 1); ?></a>
+                </li>
+            <?php } ?>
+            <li class="active">
+                <a class="page-link" href="<?php echo $url . $pageVar . '=' . $page; ?>"><?php echo $page; ?></a>
+            </li>
+            <?php if (($page + 1) <= $totalPages) { ?>
+                <li class="page-item"><a class="page-link" href="<?php echo $url . $pageVar . '=' . ($page + 1); ?>"><?php echo ($page + 1); ?></a></li>
+            <?php } ?>
+            <?php if (($page + 2) <= $totalPages) { ?>
+                <li class="page-item"><a class="page-link" href="<?php echo $url . $pageVar . '=' . ($page + 2); ?>"><?php echo ($page + 2); ?></a></li>
+            <?php } ?>
+            <?php if (($page + 3) <= $totalPages) { ?>
+                <li class="page-item"><a class="page-link" href="<?php echo $url . $pageVar . '=' . ($page + 3); ?>"><?php echo ($page + 3); ?></a></li>
+            <?php } ?>
+            <?php if ($totalPages > 1 && $page < $totalPages) { ?>
+                <li class="page-item">
+                    <a class="page-link" href="<?php echo $url . $pageVar . '=' . $totalPages; ?>" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            <?php } ?>
+        </ul>
+    </nav><?php } ?>
