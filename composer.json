@@ -1,0 +1,11 @@
+{
+    "name": "ertfly/pequi",
+    "description": "Pequi Framework",
+    "autoload": {
+        "psr-4": {
+            "PequiPHP\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
