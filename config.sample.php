@@ -18,7 +18,7 @@ define('PATH_MIGRATIONS', PATH_ROOT . 'migrations' . DS);
 define('PATH_ROUTES', PATH_ROOT . 'routes' . DS);
 
 define('SESSION_LIFETIME', (60 * 30));
-define('SESSION_NAME', 'webtrack');
-define('GZIP',false);
+define('SESSION_NAME', 'mysession');
+define('GZIP', false);
 
 require PATH_ROOT . 'vendor/autoload.php';
