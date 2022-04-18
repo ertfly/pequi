@@ -2,7 +2,7 @@
 
 namespace Pequi;
 
-use PequiPHP\Tools\Strings;
+use Pequi\Tools\Strings;
 use Exception;
 
 class Cron
@@ -18,9 +18,10 @@ class Cron
         if (count($data) > 0) {
             file_put_contents(PATH_TMP . $token . '.tmp', json_encode($data));
         }
-        $handle = popen('/usr/bin/php ' . PATH_CRON . $command . '.php "' .  $token . '.tmp' . '" &', 'r');
+        $strCommand = '/usr/bin/php ' . PATH_CRON . $command . '.php' .  (count($data) > 0 ? ' "' . $token . '.tmp"' : '') . ' &';
+        $handle = popen($strCommand, 'r');
         if ($debug) {
-            $output = '/usr/bin/php ' . PATH_CRON . $command . '.php "' .  $token . '.tmp' . '" &\n';
+            $output = $strCommand . '\n';
             if ($handle) {
                 while ($tmp = fgets($handle)) {
                     $output .= $tmp;
@@ -46,5 +47,12 @@ class Cron
         }
 
         return false;
+    }
+
+    public static function stop($command)
+    {
+        $strCommand = '/usr/bin/pkill -f "' . PATH_CRON . $command . '.php"';
+        $handle = popen($strCommand, 'r');
+        pclose($handle);
     }
 }

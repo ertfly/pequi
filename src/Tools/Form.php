@@ -2,7 +2,7 @@
 
 namespace Pequi\Tools;
 
-use PequiPHP\Session;
+use Pequi\Session;
 
 class Form
 {

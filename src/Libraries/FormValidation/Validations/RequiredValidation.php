@@ -2,7 +2,7 @@
 
 namespace Pequi\Libraries\FormValidation\Validations;
 
-use PequiPHP\Translate;
+use Pequi\Translate;
 
 class RequiredValidation extends AbstractValidation
 {

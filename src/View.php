@@ -2,12 +2,13 @@
 
 namespace Pequi;
 
-use PequiPHP\Constants\ResponseMime;
-use PequiPHP\Tools\Response;
+use Pequi\Constants\ResponseMime;
+use Pequi\Tools\Response;
 use Exception;
 
 class View
 {
+    private $data = [];
     private $directory;
     private $fileExtension;
     public function __construct($directory, $fileExtension = 'phtml')
@@ -19,8 +20,9 @@ class View
         $this->fileExtension = $fileExtension;
     }
 
-    public function render($file, $data = array(), $return = false, $mime = ResponseMime::HTML, $gzip = false)
+    public function render($file, $data = [], $return = false, $mime = ResponseMime::HTML, $gzip = false)
     {
+        $data = array_merge($this->data, $data);
         foreach ($data as $varName => $varValue) {
             ${$varName} = $varValue;
         }
@@ -47,5 +49,11 @@ class View
         } else {
             throw new Exception('Mimetype inválido');
         }
+    }
+
+    public function addData($key, $value)
+    {
+        $this->data[$key] = $value;
+        return $this;
     }
 }

@@ -2,8 +2,8 @@
 
 namespace Pequi\Tools;
 
-use PequiPHP\Constants\ResponseCharset;
-use PequiPHP\Constants\ResponseMime;
+use Pequi\Constants\ResponseCharset;
+use Pequi\Constants\ResponseMime;
 use Exception;
 
 /**

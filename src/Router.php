@@ -2,9 +2,9 @@
 
 namespace Pequi;
 
-use PequiPHP\Tools\Request;
-use PequiPHP\Tools\Response;
-use PequiPHP\Tools\Strings;
+use Pequi\Tools\Request;
+use Pequi\Tools\Response;
+use Pequi\Tools\Strings;
 use Exception;
 use stdClass;
 
@@ -53,17 +53,18 @@ class Router
                         if (strpos($uri, '{') === false) {
                             continue;
                         }
-                        $checkUri = preg_replace("/(\{.+\})/", "(.+)", $uri);
-                        $checkUri = str_replace('/','\\/',$checkUri);
 
-                        if(!preg_match("/^{$checkUri}$/", self::$uri)){
+                        $checkUri = preg_replace("/(\/\{.+\})/", "(/[a-zA-Z\-\.\_0-9]+|.*)", $uri);
+                        $checkUri = str_replace('/', '\\/', $checkUri);
+
+                        if (!preg_match("/^{$checkUri}$/", self::$uri)) {
                             continue;
                         }
 
                         $arrUri = explode('/', $uri);
                         $parameters = [];
                         for ($i = 0; $i < count($arrUri); $i++) {
-                            if ($arrUri[$i] == $paths[$i]) {
+                            if (isset($paths[$i]) && $arrUri[$i] == $paths[$i]) {
                                 continue;
                             }
                             if (isset($setting['validate'])) {
@@ -71,10 +72,10 @@ class Router
                                     continue;
                                 }
                             }
-                            $parameters[$arrUri[$i]] = $paths[$i];
+                            $parameters[$arrUri[$i]] = isset($paths[$i]) ? $paths[$i] : null;
                         }
 
-                        if (self::$uri != str_replace(array_keys($parameters), array_values($parameters), $uri)) {
+                        if (self::$uri != rtrim(str_replace(array_keys($parameters), array_values($parameters), $uri), '/')) {
                             continue;
                         }
 
@@ -160,9 +161,11 @@ class Router
             $url = explode(':', $uri)[1];
             break;
         }
-        $names = [];
-        preg_match("/\{[A-z0-9\?]+\}/", $url, $names);
+        $names = explode('/', $url);
         for ($i = 0; $i < count($names); $i++) {
+            if (!preg_match("/\{/", $names[$i])) {
+                continue;
+            }
             $var = str_replace(['{', '}', '?'], '', $names[$i]);
             if (!is_null($parameters) && isset($parameters[$var])) {
                 $url = str_replace('{' . $var . '}', $parameters[$var], $url);
@@ -173,6 +176,7 @@ class Router
             $url = str_replace('{' . $var . '}', '', $url);
             $url = str_replace('{' . $var . '?}', '', $url);
         }
+
         return '/' . trim($url, '/') . (!is_null($getParams) ? '?' . http_build_query($getParams) : '');
     }
 }

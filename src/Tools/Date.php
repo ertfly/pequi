@@ -2,6 +2,11 @@
 
 namespace Pequi\Tools;
 
+use AnexusPHP\Business\Region\Entity\RegionCountryEntity;
+use DateTime;
+use DateTimeZone;
+use IntlDateFormatter;
+
 class Date
 {
     public static function formatToTime($format, $strTime)
@@ -20,6 +25,22 @@ class Date
         $date[1] = self::showMonth($date[1]);
         $date = "{$date[0]} de {$date[1]} de {$date[2]} - {$date[3]}";
         return $date;
+    }
+
+    public static function timeConverter($time, RegionCountryEntity $country, bool $hour = false)
+    {
+        $arr = explode(' ', $time);
+        $format = '';
+        if (count($arr) > 1) {
+            $format = 'Y-m-d H:i:s';
+        } else {
+            $format = 'Y-m-d';
+        }
+        $localTime = DateTime::createFromFormat($format, $time, new DateTimeZone('America/Sao_Paulo'));
+
+        $formatter = new IntlDateFormatter($country->getLocale(), IntlDateFormatter::NONE, IntlDateFormatter::NONE, $country->getTimeZone(), IntlDateFormatter::GREGORIAN, $hour ? $country->getDateHourFormat() :  $country->getDateFormat());
+
+        return $formatter->format($localTime);
     }
 
     public static function showMonth($month)

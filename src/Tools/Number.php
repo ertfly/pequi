@@ -55,4 +55,22 @@ class Number
     {
         return (preg_match("/\-/", $coordenada) ? '-' . number_format(str_replace('-', '', $coordenada), 7, '.', '') : number_format(str_replace('-', '', $coordenada), 7, '.', ''));
     }
+
+    public static function intNull($var)
+    {
+        if (!is_double($var) && !is_int($var) && !is_string($var) && !is_bool($var) && trim($var) == '') {
+            return null;
+        }
+
+        return intval($var);
+    }
+
+    public static function doubleNull($var)
+    {
+        if (!is_double($var) && !is_int($var) && !is_string($var) && !is_bool($var) && trim($var) == '') {
+            return null;
+        }
+
+        return doubleval($var);
+    }
 }

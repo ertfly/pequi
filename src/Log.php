@@ -2,7 +2,7 @@
 
 namespace Pequi;
 
-use PequiPHP\Tools\Strings;
+use Pequi\Tools\Strings;
 
 class Log
 {

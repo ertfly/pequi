@@ -2,8 +2,8 @@
 
 namespace Pequi\Libraries\FormValidation\Validations;
 
-use PequiPHP\Tools\Date;
-use PequiPHP\Translate;
+use Pequi\Tools\Date;
+use Pequi\Translate;
 use Exception;
 
 class DateValidation extends AbstractValidation

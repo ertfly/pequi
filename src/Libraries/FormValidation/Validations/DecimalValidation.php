@@ -2,8 +2,8 @@
 
 namespace Pequi\Libraries\FormValidation\Validations;
 
-use PequiPHP\Tools\Number;
-use PequiPHP\Translate;
+use Pequi\Tools\Number;
+use Pequi\Translate;
 
 class DecimalValidation extends AbstractValidation
 {

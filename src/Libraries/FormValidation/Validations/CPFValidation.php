@@ -2,8 +2,8 @@
 
 namespace Pequi\Libraries\FormValidation\Validations;
 
-use PequiPHP\Tools\Strings;
-use PequiPHP\Translate;
+use Pequi\Tools\Strings;
+use Pequi\Translate;
 
 class CPFValidation extends AbstractValidation
 {

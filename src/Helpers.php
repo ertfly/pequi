@@ -1,24 +1,14 @@
 <?php
 
-use AnexusPHP\Business\App\Constant\AppTypeConstant;
-use AnexusPHP\Business\App\Entity\AppEntity;
-use AnexusPHP\Business\App\Entity\AppSessionEntity;
-use AnexusPHP\Business\App\Repository\AppSessionRepository;
-use AnexusPHP\Business\App\Rule\AppSessionRule;
-use AnexusPHP\Business\Authfast\Entity\AuthfastActivityEntity;
-use AnexusPHP\Business\Authfast\Repository\AuthfastPermissionRepository;
-use AnexusPHP\Business\Authfast\Rule\AuthfastActivityRule;
-use AnexusPHP\Business\Configuration\Repository\ConfigurationRepository;
-use AnexusPHP\Business\Region\Entity\RegionCountryEntity;
-use PequiPHP\Router;
-use PequiPHP\Session;
-use PequiPHP\Template;
-use PequiPHP\Tools\Date;
-use PequiPHP\Tools\Form;
-use PequiPHP\Tools\Request;
-use PequiPHP\Tools\Response;
-use PequiPHP\Tools\Strings;
-use PequiPHP\Translate;
+use Pequi\Router;
+use Pequi\Session;
+use Pequi\Template;
+use Pequi\Tools\Date;
+use Pequi\Tools\Form;
+use Pequi\Tools\Request;
+use Pequi\Tools\Response;
+use Pequi\Tools\Strings;
+use Pequi\Translate;
 
 function url($name, array $parameters = null, array $getParams = null)
 {
@@ -207,88 +197,6 @@ function upload($path, $time = false)
     return $fileUrl;
 }
 
-function sid(AppEntity $app, $className)
-{
-    if (!$app->getId()) {
-        throw new \Exception('App inválido');
-    }
-
-    $token = Session::item('token');
-
-    $sid = AppSessionRepository::byToken($token, $className);
-    if (!$sid->getId()) {
-        $remoteAddr = null;
-        if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $remoteAddr = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        } else if (isset($_SERVER['REMOTE_ADDR'])) {
-            $remoteAddr = $_SERVER['REMOTE_ADDR'];
-        }
-        //HTTP_X_FORWARDED_FOR
-        $token = Strings::token();
-        $sid->setToken($token)
-            ->setAppId($app->getId())
-            ->setType(AppTypeConstant::BROWSER)
-            ->setAccessIp($remoteAddr)
-            ->setAccessBrowser((isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : null));
-        AppSessionRule::insert($sid);
-        Session::data('token', $token);
-    } else {
-        AppSessionRule::update($sid);
-    }
-
-    return $sid;
-}
-
-function timeConverter($time, RegionCountryEntity $country, $hour = false)
-{
-    return Date::timeConverter($time, $country, $hour);
-}
-
-function is_logged()
-{
-    /**
-     * @var AppSessionEntity $sid
-     */
-    $sid = request()->sid;
-
-    if ($sid->getManager()) {
-        return true;
-    }
-
-    $person = $sid->getAuthfast();
-    if ($person->getId()) {
-        if ($person->getExpiredAt() == null) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-function isLoggedApi()
-{
-    $person = request()->sid->getAuthfast();
-    if ($person->getId()) {
-        if ($person->getExpiredAt() == null) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-/**
- * @param integer $module
- * @param integer $event
- * @return boolean
- */
-function verifyPermission(int $module, int $event)
-{
-    $module = AuthfastPermissionRepository::byAuthfastAndModule(request()->sid->getAuthfast(), $module);
-
-    return in_array($event, explode(',', (string)$module->getEvents()));
-}
-
 function GUID()
 {
     if (function_exists('com_create_guid') === true) {
@@ -298,40 +206,9 @@ function GUID()
     return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
 }
 
-function dd($value)
-{
-    var_dump($value);
-    die();
-}
-
 function translate($var, $key, $defaultValue = null, $trim = false)
 {
     return Translate::get($var, $key, $defaultValue, $trim);
-}
-
-function template($name, $defaultValue = null, $isUpload = false)
-{
-    return Template::getSettingByKey($name, $defaultValue, $isUpload);
-}
-
-/**
- * @param int $activity
- * @param int $module
- * @param int $bind_id
- * @param int $description
- */
-function create_log(int $activity, int $module, int $bind_id, $description = null)
-{
-    $log = new AuthfastActivityEntity;
-    $sid = request()->sid;
-    if (!is_null($sid)) {
-        $log->setAuthfastId(request()->sid->getAuthfastId() ? request()->sid->getAuthfastId() : 0)
-            ->setModule($module)
-            ->setBindId($bind_id)
-            ->setActivity($activity)
-            ->setDescription($description);
-        AuthfastActivityRule::insert($log);
-    }
 }
 
 /**
@@ -351,16 +228,19 @@ function xmlFormatter($data)
 /**
  * Undocumented function
  *
- * @param string $key
- * @param string $defaultValue
- * @return void
+ * @param array|null $attr
+ * @return string
  */
-function config($key, $defaultValue = null)
+function htmlAttr(?array $attr)
 {
-    $value = ConfigurationRepository::getValue($key);
-    if (trim($value) == '') {
-        return $defaultValue;
+    if (!is_array($attr) || count($attr) == 0) {
+        return;
     }
 
-    return $value;
+    $str = '';
+    foreach ($attr as $k => $v) {
+        $str .= ' ' . $k . '="' . $v . '"';
+    }
+
+    return $str;
 }

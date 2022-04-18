@@ -2,9 +2,9 @@
 
 namespace Pequi\Tools;
 
-use PequiPHP\Libraries\FormValidation\FormValidation;
-use PequiPHP\Session;
-use PequiPHP\Tools\Strings;
+use Pequi\Libraries\FormValidation\FormValidation;
+use Pequi\Session;
+use Pequi\Tools\Strings;
 use Exception;
 
 /**
