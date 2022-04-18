@@ -1,13 +1,9 @@
 <?php
 
 use Pequi\Router;
-use Pequi\Session;
-use Pequi\Template;
-use Pequi\Tools\Date;
 use Pequi\Tools\Form;
 use Pequi\Tools\Request;
 use Pequi\Tools\Response;
-use Pequi\Tools\Strings;
 use Pequi\Translate;
 
 function url($name, array $parameters = null, array $getParams = null)
