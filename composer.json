@@ -3,7 +3,7 @@
     "description": "Pequi Framework",
     "autoload": {
         "psr-4": {
-            "PequiPHP\\": "src/"
+            "Pequi\\": "src/"
         }
     },
     "require": {

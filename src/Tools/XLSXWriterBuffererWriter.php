@@ -6,7 +6,7 @@
  * Time: 22:00
  */
 
-namespace PequiPHP\Tools;
+namespace Pequi\Tools;
 
 
 class XLSXWriterBuffererWriter

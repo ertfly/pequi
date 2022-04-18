@@ -1,6 +1,6 @@
 <?php
 
-namespace PequiPHP;
+namespace Pequi;
 
 use AnexusPHP\Business\Configuration\Repository\ConfigurationRepository;
 use League\Plates\Engine;

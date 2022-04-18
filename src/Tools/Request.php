@@ -1,6 +1,6 @@
 <?php
 
-namespace PequiPHP\Tools;
+namespace Pequi\Tools;
 
 use PequiPHP\Libraries\FormValidation\FormValidation;
 use PequiPHP\Session;

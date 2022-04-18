@@ -1,6 +1,6 @@
 <?php
 
-namespace PequiPHP\Tools;
+namespace Pequi\Tools;
 
 use PequiPHP\Constants\ResponseCharset;
 use PequiPHP\Constants\ResponseMime;

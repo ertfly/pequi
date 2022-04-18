@@ -1,6 +1,6 @@
 <?php
 
-namespace PequiPHP\Libraries\FormValidation;
+namespace Pequi\Libraries\FormValidation;
 
 use PequiPHP\Libraries\FormValidation\Validations\AbstractValidation;
 use PequiPHP\Tools\Strings;

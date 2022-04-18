@@ -1,6 +1,6 @@
 <?php
 
-namespace PequiPHP\Libraries\FormValidation\Validations;
+namespace Pequi\Libraries\FormValidation\Validations;
 
 use PequiPHP\Tools\Number;
 use PequiPHP\Translate;

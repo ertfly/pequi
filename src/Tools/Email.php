@@ -1,6 +1,6 @@
 <?php
 
-namespace PequiPHP\Tools;
+namespace Pequi\Tools;
 
 use Exception;
 use Swift_Mailer;

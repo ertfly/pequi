@@ -1,6 +1,6 @@
 <?php
 
-namespace PequiPHP;
+namespace Pequi;
 
 use PequiPHP\Tools\Strings;
 

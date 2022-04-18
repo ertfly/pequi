@@ -1,6 +1,6 @@
 <?php
 
-namespace PequiPHP\Constants;
+namespace Pequi\Constants;
 
 /**
  * Description of ResponseHttpStatus

@@ -1,6 +1,6 @@
 <?php
 
-namespace PequiPHP;
+namespace Pequi;
 
 abstract class MongoEntity implements \MongoDB\BSON\Unserializable
 {
