@@ -2,7 +2,6 @@
 
 namespace Pequi\Tools;
 
-use AnexusPHP\Business\Configuration\Repository\ConfigurationRepository;
 use Exception;
 use Swift_Mailer;
 use Swift_Message;
@@ -11,16 +10,16 @@ use Swift_SmtpTransport;
 
 class Email
 {
-    public static function send($toEmails, $subject, $message, $debug = false)
+    public static function send($toEmails, $subject, $message, $debug = false, $config)
     {
-        $smtp_url = ConfigurationRepository::getValue('email_url');
-        $smtp_port = ConfigurationRepository::getValue('email_port');
-        $smtp_pwd = ConfigurationRepository::getValue('email_password');
-        $smtp_user = ConfigurationRepository::getValue('email_user');
-        $smtp_fromEmail = ConfigurationRepository::getValue('email_from_email');
-        $smtp_fromName = ConfigurationRepository::getValue('email_from_name');
-        $smtp_protocol = ConfigurationRepository::getValue('email_protocol');
-        $smtp_domain = ConfigurationRepository::getValue('email_domain');
+        $smtp_url = isset($config['email_url']) ? $config['email_url'] : null;
+        $smtp_port = isset($config['email_port']) ? $config['email_port'] : null;
+        $smtp_pwd = isset($config['email_password']) ? $config['email_password'] : null;
+        $smtp_user = isset($config['email_user']) ? $config['email_user'] : null;
+        $smtp_fromEmail = isset($config['email_from_email']) ? $config['email_from_email'] : null;
+        $smtp_fromName = isset($config['email_from_name']) ? $config['email_from_name'] : null;
+        $smtp_protocol = isset($config['email_protocol']) ? $config['email_protocol'] : null;
+        $smtp_domain = isset($config['email_domain']) ? $config['email_domain'] : null;
 
         $transport = (new Swift_SmtpTransport($smtp_url, intval($smtp_port), $smtp_protocol))
             ->setUsername($smtp_user)
