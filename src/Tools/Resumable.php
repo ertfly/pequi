@@ -13,7 +13,7 @@ class Resumable
     public static function processarArquivo($diretorio, array $extensoesPermitidas)
     {
         self::$diretorioFiles = PATH_UPLOADS;
-        self::$diretorioUpload = PATH_UPLOADS . 'temporario' . DS;
+        self::$diretorioUpload = PATH_UPLOADS . 'tmp' . DS;
         // loop through files and move the chunks to a temporarily created directory
         if (!empty($_FILES)) {
             foreach ($_FILES as $file) {
