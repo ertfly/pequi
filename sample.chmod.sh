@@ -1,0 +1,2 @@
+#!/bin/bash
+chmod a+rwx cache/ logs/ tmp/ public/uploads/ public/uploads/admin/ public/uploads/application/ public/uploads/flags/ public/uploads/persons/ public/uploads/scope/ public/uploads/templates/ public/uploads/temporario/ public/uploads/reports/  languages/app/pt_BR/ languages/app/es_BO/

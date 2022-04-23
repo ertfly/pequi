@@ -1,0 +1,31 @@
+version: '2'
+services:
+  cadastro:
+    container_name: nome.instancia
+    image: ertfly/php7.4.9-apache-buster
+    build: .
+    restart: always
+    ports:
+      - '8004:80'
+    volumes:
+      - ./:/app
+    networks:
+      - dev-net
+  cadastro-db:
+    container_name: db.nome.instancia
+    image: postgres
+    restart: always
+    ports:
+      - '5434:5432'
+    environment:
+      POSTGRES_DB: database
+      POSTGRES_USER: usuario
+      POSTGRES_PASSWORD: senha
+    networks:
+      - dev-net
+    volumes:
+      - ./db/:/var/lib/postgresql/data
+      
+networks:
+  dev-net:
+    external: true
