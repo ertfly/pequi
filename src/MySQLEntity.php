@@ -4,7 +4,7 @@ namespace Pequi;
 
 use Medoo\Medoo;
 
-abstract class PSQLEntity
+abstract class MySQLEntity
 {
     abstract public function setId($id);
     abstract public function getId();
