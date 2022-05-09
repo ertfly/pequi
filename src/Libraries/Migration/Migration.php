@@ -1,8 +1,7 @@
 <?php
 
-namespace Libraries\Migration;
+namespace Pequi\Libraries\Migration;
 
-use Pequi\Database;
 use Pequi\Libraries\Migration\MigrationInterface;
 
 class Migration
