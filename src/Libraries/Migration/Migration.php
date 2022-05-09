@@ -7,27 +7,24 @@ use Pequi\Libraries\Migration\MigrationInterface;
 
 class Migration
 {
-    public static function init(MigrationInterface $config, $id)
+    public static function init(MigrationInterface $config, $id, $db)
     {
         if (!$config->getId()) {
             $config
                 ->setId($id)
                 ->setValue(0)
                 ->setDescription('Versões do migration');
-            $db = Database::getInstance();
             $config->insert($db);
-            Database::closeInstance();
             include PATH_MIGRATIONS . 'install.php';
         }
 
         if (is_file(PATH_MIGRATIONS . ($config->getValue() + 1) . '.php')) {
-            self::loadScripts($config);
+            self::loadScripts($config, $db);
         }
     }
 
-    public static function loadScripts(MigrationInterface $config)
+    public static function loadScripts(MigrationInterface $config, $db)
     {
-        $db = Database::getInstance();
         $version = $config->getValue();
         $check = true;
         while ($check) {
