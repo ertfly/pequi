@@ -18,7 +18,7 @@ class Pagination
     {
         $this->total = $total;
         $this->perPage = $perPage;
-        $this->page = ($page == 0 ? 1 : $page);
+        $this->page = ($page == 0 ? 1 : intval($page));
         $this->url = $url;
         $this->rows = array();
         $this->pageVar = $pageVar;
@@ -41,6 +41,15 @@ class Pagination
         if (ceil($this->total / $this->perPage) > 1) {
             return (int) $this->perPage * ($this->page - 1);
         }
+        return 0;
+    }
+
+    public function getOffsetMongo()
+    {
+        if ($this->page > 1) {
+            return ($this->page * $this->perPage) - $this->perPage;
+        }
+
         return 0;
     }
 
