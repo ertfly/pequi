@@ -50,6 +50,30 @@ class Date
         return $months[$month];
     }
 
+    public static function showMonthLower($month)
+    {
+        $months = array(
+            '01' => 'janeiro',
+            '02' => 'fevereiro',
+            '03' => 'março',
+            '04' => 'abril',
+            '05' => 'maio',
+            '06' => 'junho',
+            '07' => 'julho',
+            '08' => 'agosto',
+            '09' => 'setembro',
+            '10' => 'outubro',
+            '11' => 'novembro',
+            '12' => 'dezembro'
+        );
+
+        if (!isset($months[$month])) {
+            throw new \Exception('Ocorreu um erro ao descrever o mês.');
+        }
+
+        return $months[$month];
+    }
+
     public static function showMonthLess($month, $lowercase = false)
     {
         $months = array(
