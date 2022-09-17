@@ -33,9 +33,9 @@ class FormValidation
         }
     }
 
-    public function executeValidation($value, $description, array $validations, $options = null)
+    public function executeValidation(&$value, $description, array $validations, $options = null)
     {
-        $this->value = $value;
+        $this->value = &$value;
         $this->description = $description;
         $this->validations = $validations;
         $this->options = $options;
