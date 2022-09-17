@@ -37,4 +37,9 @@ class DateValidation extends AbstractValidation
         }
         return;
     }
+
+    public function hasNewValue()
+    {
+        return true;
+    }
 }

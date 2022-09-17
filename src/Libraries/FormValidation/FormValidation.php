@@ -61,6 +61,10 @@ class FormValidation
             }
 
             $newValidation->validate();
+
+            if ($newValidation->hasNewValue()) {
+                $this->value = $newValidation->getValue();
+            }
         }
     }
 }
