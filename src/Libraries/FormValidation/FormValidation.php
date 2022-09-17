@@ -21,6 +21,7 @@ class FormValidation
     private $description;
     private $options;
     private $value;
+    private $newValue;
 
     public function __construct($value = null, $description = null, array $validations = null, $options = null)
     {
@@ -62,7 +63,8 @@ class FormValidation
 
             $newValidation->validate();
 
-            if ($newValidation->hasNewValue()) {
+            $this->newValue = $newValidation->hasNewValue();
+            if ($this->newValue) {
                 $this->value = $newValidation->getValue();
             }
         }
@@ -70,7 +72,7 @@ class FormValidation
 
     public function hasNewValue()
     {
-        return false;
+        return $this->newValue;
     }
 
     public function getValue()
