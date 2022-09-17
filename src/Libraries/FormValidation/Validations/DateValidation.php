@@ -29,7 +29,7 @@ class DateValidation extends AbstractValidation
         }
 
         if (isset($this->options['format_to'])) {
-            $this->value = date($this->options['format_to'], $this->value);
+            $this->value = date($this->options['format_to'], $time);
         }
 
         if (isset($this->options['timestamp']) && is_bool($this->options['timestamp']) && $this->options['timestamp']) {

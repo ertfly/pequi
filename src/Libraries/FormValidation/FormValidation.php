@@ -67,4 +67,14 @@ class FormValidation
             }
         }
     }
+
+    public function hasNewValue()
+    {
+        return false;
+    }
+
+    public function getValue()
+    {
+        return $this->value;
+    }
 }
