@@ -34,7 +34,10 @@ class Request
         }
 
         if (isset($description) && isset($validations) && is_string($description) && is_array($validations) && count($validations) > 0) {
-            new FormValidation($_GET[$key], $description, $validations, $options);
+            $validation = new FormValidation($_GET[$key], $description, $validations, $options);
+            if ($validation->hasNewValue()) {
+                return $validation->getValue();
+            }
         }
 
         return trim($_GET[$key]);
@@ -83,7 +86,7 @@ class Request
         if (self::$post) {
             $_POST = self::$post;
         }
-        
+
         if (!isset($_POST[$key]) && !isset($description)) {
             return null;
         }
@@ -103,7 +106,10 @@ class Request
         }
 
         if (isset($description) && isset($validations) && is_string($description) && is_array($validations) && count($validations) > 0) {
-            new FormValidation($_POST[$key], $description, $validations, $options);
+            $validation = new FormValidation($_POST[$key], $description, $validations, $options);
+            if ($validation->hasNewValue()) {
+                return $validation->getValue();
+            }
         }
 
         return trim($_POST[$key]);
@@ -404,7 +410,10 @@ class Request
         }
 
         if (isset($description) && isset($validations) && is_string($description) && is_array($validations) && count($validations) > 0) {
-            new FormValidation($data[$key], $description, $validations, $options);
+            $validation = new FormValidation($data[$key], $description, $validations, $options);
+            if ($validation->hasNewValue()) {
+                return $validation->getValue();
+            }
         }
 
         return trim($data[$key]);
