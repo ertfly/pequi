@@ -12,10 +12,9 @@ class CPFValidation extends AbstractValidation
     public function validate()
     {
         $this->message = Translate::get('validation', 'CPFValidation', 'O campo %s esta inválido');
-        if (trim($this->value) != '' && !$this->cpf($this->value)) {
+        if ($this->value != '' && !$this->cpf($this->value)) {
             throw new \Exception(sprintf($this->message, $this->description));
         }
-        return;
     }
 
     public function cpf($cpf)

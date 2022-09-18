@@ -8,14 +8,13 @@ use Pequi\Translate;
 class CNPJValidation extends AbstractValidation
 {
     private $message;
-    
+
     public function validate()
     {
         $this->message = Translate::get('validation', 'CNPJValidation', 'O campo %s esta inválido');
-        if (trim($this->value) != '' && !$this->cnpj($this->value)) {
+        if ($this->value != '' && !$this->cnpj($this->value)) {
             throw new \Exception(sprintf($this->message, $this->description));
         }
-        return;
     }
 
     public static function cnpj($cnpj)
