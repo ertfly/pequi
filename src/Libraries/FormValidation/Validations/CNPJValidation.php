@@ -15,6 +15,10 @@ class CNPJValidation extends AbstractValidation
         if ($this->value != '' && !$this->cnpj($this->value)) {
             throw new \Exception(sprintf($this->message, $this->description));
         }
+
+        if (isset($this->options['clear_format']) && is_bool($this->options['clear_format']) && $this->options['clear_format']) {
+            $this->value = Strings::onlyNumber($this->value);
+        }
     }
 
     public static function cnpj($cnpj)
