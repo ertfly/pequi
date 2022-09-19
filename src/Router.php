@@ -49,6 +49,10 @@ class Router
                 } else {
                     $paths = explode('/', self::$uri);
                     foreach (self::$settings as $uri => $setting) {
+                        if (strpos($uri, self::$method . ':') !== 0) {
+                            continue;
+                        }
+
                         $uri = str_replace(['get:', 'post:', 'put:', 'delete:', 'options:', 'all:'], '', $uri);
                         if (strpos($uri, '{') === false) {
                             continue;
