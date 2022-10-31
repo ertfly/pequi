@@ -17,13 +17,12 @@ class Router
     private static $setting;
     private static $request;
 
-    public static function start()
+    public static function loadHelper()
     {
-        require_once 'Helpers.php';
-        self::init();
+        require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Helpers.php';
     }
 
-    private static function init()
+    public static function loadSetting()
     {
         if (is_null(self::$settings)) {
             if (!is_file(PATH_ROOT . 'routes.php')) {
@@ -31,6 +30,17 @@ class Router
             }
             self::$settings = require_once(PATH_ROOT . 'routes.php');
         }
+    }
+
+    public static function start()
+    {
+        self::loadHelper();
+        self::init();
+    }
+
+    private static function init()
+    {
+        self::loadSetting();
         if (is_null(self::$method)) {
             self::$method = strtolower(Request::getHttpMethod());
         }
@@ -153,6 +163,7 @@ class Router
 
     public static function getUrl($name, array $parameters = null, array $getParams = null)
     {
+        self::loadSetting();
         $url = $name;
         foreach (self::$settings as $uri => $setting) {
             if (!isset($setting['name'])) {
