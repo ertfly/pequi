@@ -59,7 +59,7 @@ class Router
                 } else {
                     $paths = explode('/', self::$uri);
                     foreach (self::$settings as $uri => $setting) {
-                        if (strpos($uri, self::$method . ':') !== 0) {
+                        if (!preg_match("/^all\:/", $uri) && strpos($uri, self::$method . ':') !== 0) {
                             continue;
                         }
 
