@@ -152,4 +152,40 @@ class Date
         }
         return date('Y-m-d', $time);
     }
+
+    public static function diffHoursByDateFull($a, $b)
+    {
+        $diff = doubleval(strtotime($b)) - doubleval(strtotime($a));
+        return abs(doubleval($diff / (60 * 60)));
+    }
+
+    public static function descriptionDiff($hours, $dayText = 'dia(s)', $hourText = 'h', $minText = 'min', $secText = 's')
+    {
+        $d = floor($hours / 24);
+        $rest = abs($hours - ($d * 24));
+        $h = floor($rest);
+        $rest = abs($rest - $h);
+        $m = floor($rest * 60);
+        $rest = ($rest - ($m / 60));
+        $s = floor($rest * 3600);
+
+        $description = '';
+        if ($d > 0) {
+            $description .= $d . ' ' . $dayText;
+        }
+
+        if ($h > 0) {
+            $description .= ($description != '' ? ', ' : '') . $h . ' ' . $hourText;
+        }
+
+        if ($m > 0 || $h > 0) {
+            $description .= ($description != '' ? ', ' : '') . $m . ' ' . $minText;
+        }
+
+        if ($s > 0 || $m > 0 || $h > 0) {
+            $description .= ($description != '' ? ', ' : '') . $s . ' ' . $secText;
+        }
+
+        return $description;
+    }
 }
