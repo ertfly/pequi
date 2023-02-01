@@ -423,4 +423,47 @@ class Request
         self::inputArray($data);
         return $data;
     }
+
+    /**
+     * @param $url
+     * @param $data
+     * @param array $headers
+     * @return array
+     * @throws Exception
+     */
+    public static function sendPost($url, array $data, $headers = [], $ssl = true, $encoded = true, $timeout = 30)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+        curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
+        curl_setopt($ch, CURLOPT_HEADER, false);
+
+        if ($ssl === false) {
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+        }
+
+        if ($encoded === false) {
+            curl_setopt($ch, CURLOPT_ENCODING, "");
+        }
+
+        $response = curl_exec($ch);
+        $info = curl_getinfo($ch);
+
+        if (curl_errno($ch)) {
+            throw new Exception('Ocorreu um erro na sua requisição / Info: ' . json_encode($info, JSON_PRETTY_PRINT));
+        }
+
+        curl_close($ch);
+
+        return array(
+            'response' => $response,
+            'info' => $info
+        );
+    }
 }
