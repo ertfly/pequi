@@ -3,6 +3,7 @@
 namespace Pequi;
 
 use Medoo\Medoo;
+use Pequi\Tools\Strings;
 
 abstract class PSQLEntity
 {
@@ -18,7 +19,10 @@ abstract class PSQLEntity
      */
     public function insert($db)
     {
-        $this->setId(uniqid());
+        if(!$this->getId()){
+            $this->setId(Strings::guidV4());
+        }
+        
         $db->insert(static::TABLE, $this->toArray());
         return;
     }
