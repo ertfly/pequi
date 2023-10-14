@@ -38,6 +38,13 @@ abstract class PSQLEntity
         $db->update($tabela, $this->toArray(), $where);
     }
 
+    public function update(Medoo $db, $where = [])
+    {
+        $tabela = static::TABLE;
+        $where['id'] = $this->getId();
+        $db->update($tabela, $this->toArray(), $where);
+    }
+
     public function delete(Medoo $db, $where = [])
     {
         if(count($where)==0){
