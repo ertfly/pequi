@@ -33,8 +33,20 @@ class SessionApi
 
     public static function create($sessionId)
     {
-        self::$sessionId = $sessionId;
-        touch(PATH_CACHE . self::$sessionId . '_session');
+        if (is_file(PATH_CACHE . $sessionId . '_session')) {
+            throw new Exception('Session not create beacause file exists.');
+        }
+
+        touch(PATH_CACHE . $sessionId . '_session');
+    }
+
+    public static function exist($sessionId)
+    {
+        if (!is_file(PATH_CACHE . $sessionId . '_session')) {
+            return false;
+        }
+
+        return true;
     }
 
     public static function data($name, $value)
