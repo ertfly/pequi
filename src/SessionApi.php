@@ -2,6 +2,8 @@
 
 namespace Pequi;
 
+use Exception;
+
 class SessionApi
 {
 
@@ -23,10 +25,16 @@ class SessionApi
         }
 
         if (!is_file(PATH_CACHE . self::$sessionId . '_session')) {
-            touch(PATH_CACHE . self::$sessionId . '_session');
+            throw new Exception('Session not found');
         }
 
         self::load();
+    }
+
+    public static function create($sessionId)
+    {
+        self::$sessionId = $sessionId;
+        touch(PATH_CACHE . self::$sessionId . '_session');
     }
 
     public static function data($name, $value)
