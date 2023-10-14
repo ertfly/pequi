@@ -10,7 +10,7 @@ use MongoDB\Client;
 class Database
 {
     /**
-     * @var Medoo
+     * @var Medoo|Client
      */
     private static $instance = [];
 
@@ -21,7 +21,7 @@ class Database
     private static $settings;
 
     /**
-     * @return Medoo
+     * @return Medoo|Client
      */
     public static function getInstance($instanceName = 'default')
     {
@@ -38,13 +38,26 @@ class Database
 
         if (!isset(self::$instance[$instanceName])) {
             if (self::$settings[$instanceName]['driver'] != 'mongo') {
-                throw new Exception('This core only database use mongo');
+                self::$instance[$instanceName] = new Medoo([
+                    'database_type' => self::$settings[$instanceName]['driver'],
+                    'database_name' => self::$settings[$instanceName]['dbname'],
+                    'server' => self::$settings[$instanceName]['host'],
+                    'username' => self::$settings[$instanceName]['user'],
+                    'password' => self::$settings[$instanceName]['pass'],
+                    'port' => self::$settings[$instanceName]['port'],
+                    'charset' => self::$settings[$instanceName]['charset'],
+                    'option' => [
+                        PDO::ATTR_CASE => PDO::CASE_NATURAL,
+                        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    ]
+                ]);
+            } else {
+                $dbname = self::$settings[$instanceName]['dbname'];
+                self::$instance[$instanceName] = (new Client(
+                    'mongodb://' . self::$settings[$instanceName]['user'] . ':' . self::$settings[$instanceName]['pass'] . '@' . self::$settings[$instanceName]['host'] . ':' . self::$settings[$instanceName]['port'] . '/' . self::$settings[$instanceName]['dbname'] . '?authSource=' . self::$settings[$instanceName]['dbname']
+                ))->$dbname;
             }
-
-            $dbname = self::$settings[$instanceName]['dbname'];
-            self::$instance[$instanceName] = (new Client(
-                'mongodb://' . self::$settings[$instanceName]['user'] . ':' . self::$settings[$instanceName]['pass'] . '@' . self::$settings[$instanceName]['host'] . ':' . self::$settings[$instanceName]['port'] . '/' . self::$settings[$instanceName]['dbname'] . '?authSource=' . self::$settings[$instanceName]['dbname']
-            ))->$dbname;
         }
 
         return self::$instance[$instanceName];
