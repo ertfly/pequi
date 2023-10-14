@@ -2,6 +2,7 @@
 
 namespace Pequi;
 
+use Exception;
 use Medoo\Medoo;
 
 abstract class PSQLEntity
@@ -10,63 +11,32 @@ abstract class PSQLEntity
     abstract public function getId();
     abstract public function toArray();
 
-    public function insert(Medoo $db, $isId = false)
+    public function insert(Medoo $db)
     {
-        $tabela = static::TABLE;
-        $db->insert($tabela, $this->toArray());
-        if (!$isId) {
-            $id = $db->id();
-            $this->setId($id);
-            return;
-        }
+        $this->setId(uniqid());
+        $db->insert(static::TABLE, $this->toArray());
         return;
     }
 
-    public function save(Medoo $db, $where = [])
+    public function update(Medoo $db)
     {
-        $tabela = static::TABLE;
-        if (!$this->getId()) {
-            $db->insert($tabela, $this->toArray());
-            $id = $db->id();
-            $this->setId($id);
-            return;
-        }
-
-        if(count($where)==0){
-            $where['id'] = $this->getId();
-        }
-        $db->update($tabela, $this->toArray(), $where);
+        $db->update(static::TABLE, $this->toArray(), [
+            'id' => $this->getId(),
+        ]);
     }
 
-    public function update(Medoo $db, $where = [])
+    public function delete(Medoo $db)
     {
-        $tabela = static::TABLE;
-        $where['id'] = $this->getId();
-        $db->update($tabela, $this->toArray(), $where);
-    }
-
-    public function delete(Medoo $db, $where = [])
-    {
-        if(count($where)==0){
-            $where['id'] = $this->getId();
-        }
-        $tabela = static::TABLE;
-        if (!$this->getId()) {
-            return;
-        }
-        $db->update($tabela, ['trash' => true], $where);
+        $db->update(static::TABLE, ['trash' => true], [
+            'id' => $this->getId(),
+        ]);
     }
 
     public function destroy(Medoo $db, $where = [])
     {
-        if(count($where)==0){
-            $where['id'] = $this->getId();
-        }
-        $tabela = static::TABLE;
-        if (!$this->getId()) {
-            return;
-        }
-        $db->delete($tabela, $where);
+        $db->delete(static::TABLE, [
+            'id' => $this->getId(),
+        ]);
     }
 
     public function fromJson(array $json)
