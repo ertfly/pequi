@@ -30,6 +30,39 @@ class Router
             }
             self::$settings = require_once(PATH_ROOT . 'routes.php');
         }
+        if (isset(self::$settings['version']) && self::$settings['version'] === 2) {
+            $settings = [];
+            unset(self::$settings['version']);
+            foreach (self::$settings as $key => $items) {
+                if (preg_match("/Middleware$/", $key)) {
+                    foreach ($items as $controller => $methods) {
+                        if (!preg_match("/Controller$/", $controller)) {
+                            continue;
+                        }
+                        foreach ($methods as $uri => $method) {
+                            $settings[$uri] = [
+                                'middleware' => $key,
+                                'controller' => $controller,
+                                'method' => $method,
+                            ];
+                        }
+                    }
+                    continue;
+                }
+
+                if (preg_match("/Controller$/", $key)) {
+                    foreach ($items as $uri => $method) {
+                        $settings[$uri] = [
+                            'controller' => $key,
+                            'method' => $method,
+                        ];
+                    }
+                    continue;
+                }
+            }
+
+            self::$settings = $settings;
+        }
     }
 
     public static function start()
