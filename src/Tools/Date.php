@@ -188,4 +188,10 @@ class Date
 
         return $description;
     }
+    public static function now()
+    {
+        $t = microtime(true);
+        $now = DateTime::createFromFormat('U.u', $t);
+        return $now->format("Y-m-d H:i:s.v");
+    }
 }
