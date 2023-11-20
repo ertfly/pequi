@@ -3,7 +3,6 @@
 namespace Pequi\Tools;
 
 use Pequi\Libraries\FormValidation\FormValidation;
-use Pequi\Session;
 use Pequi\Tools\Strings;
 use Exception;
 

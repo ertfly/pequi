@@ -1,0 +1,35 @@
+<?php
+
+use Pequi\Router;
+
+date_default_timezone_set(getenv('TZ'));
+
+define('PATH_ROOT', __DIR__ . '/');
+define('PATH_MIGRATIONS', PATH_ROOT . '/migrations/');
+
+require PATH_ROOT . 'vendor/autoload.php';
+
+Router::start();
+
+$version = 0;
+if (is_file(PATH_MIGRATIONS . 'version')) {
+    $version = intval(file_get_contents(PATH_MIGRATIONS . 'version'));
+} else {
+    require_once PATH_ROOT . 'migrations/install.php';
+}
+
+if ($version === 0) {
+    $loop = true;
+    while ($loop) {
+        if (!is_file(PATH_MIGRATIONS . ($version + 1) . '.php')) {
+            $loop = false;
+            break;
+        }
+        $version = ($version + 1);
+        require_once PATH_ROOT . 'migrations/' . $version . '.php';
+    }
+}
+
+file_put_contents(PATH_MIGRATIONS . 'version', $version);
+
+exit('Migration Success' . chr(10));

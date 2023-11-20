@@ -25,11 +25,11 @@ class Database
      */
     public static function getInstance($instanceName = 'default')
     {
-        if (!is_file(PATH_ROOT . 'database.php')) {
+        if (!is_file(getenv('PATH_ROOT') . 'database.php')) {
             throw new Exception('File database.php not exist.');
         }
         if (!self::$settings) {
-            self::$settings = require_once PATH_ROOT . 'database.php';
+            self::$settings = require_once getenv('PATH_ROOT') . 'database.php';
         }
 
         if (!isset(self::$settings[$instanceName])) {

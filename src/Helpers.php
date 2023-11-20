@@ -4,7 +4,6 @@ use Pequi\Router;
 use Pequi\Tools\Form;
 use Pequi\Tools\Request;
 use Pequi\Tools\Response;
-use Pequi\Translate;
 
 function url($name, array $parameters = null, array $getParams = null)
 {
@@ -17,8 +16,8 @@ function url_absolute($name = null, $parameters = null, ?array $getParams = null
     $protocol = isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? "https://" : "http://";
     $domainName = isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '/');
     $base = $protocol . $domainName;
-    if (defined('BASE_URL')) {
-        $base = BASE_URL;
+    if (getenv('BASE_URL')) {
+        $base = getenv('BASE_URL');
     }
     return rtrim($base . url($name, $parameters, $getParams), '/');
 }
@@ -158,7 +157,7 @@ function responseApi(array $data, $code = 0, $msg = 'Success')
  */
 function responseApiError(\Exception $e)
 {
-    $code = -1;
+    $code = 1;
     if ($e->getCode() > 0) {
         $code = $e->getCode();
     }
@@ -167,7 +166,7 @@ function responseApiError(\Exception $e)
             'code' => $code,
             'msg' => $e->getMessage(),
         ],
-        'data' => [],
+        'data' => null,
     ]);
 }
 
@@ -176,7 +175,7 @@ function asset($path, $time = true)
 {
     $fileUrl = url_absolute('assets/' . $path);
     $fileUrl = rtrim($fileUrl, '/');
-    $fileDir = PATH_PUBLIC . 'assets' . DS . $path;
+    $fileDir = getenv('PATH_PUBLIC') . 'assets/' . $path;
 
     if ($time && file_exists($fileDir)) {
         $fileUrl .= '?v=' . filemtime($fileDir);
@@ -189,59 +188,11 @@ function upload($path, $time = false)
 {
     $fileUrl = url_absolute('uploads/' . $path);
     $fileUrl = rtrim($fileUrl, '/');
-    $fileDir = PATH_PUBLIC . 'uploads' . DS . $path;
+    $fileDir = getenv('PATH_PUBLIC') . 'uploads/' . $path;
 
     if ($time && file_exists($fileDir)) {
         $fileUrl .= '?v=' . filemtime($fileDir);
     }
 
     return $fileUrl;
-}
-
-function GUID()
-{
-    if (function_exists('com_create_guid') === true) {
-        return trim(com_create_guid(), '{}');
-    }
-
-    return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
-}
-
-function translate($var, $key, $defaultValue = null, $trim = false)
-{
-    return Translate::get($var, $key, $defaultValue, $trim);
-}
-
-/**
- * Recebe uma string xml e formata os dados para retornar 
- * um array contendo os valores (values) e indices (indexes)
- * @param string $data
- * @return array 
- */
-function xmlFormatter($data)
-{
-    $p = xml_parser_create();
-    xml_parse_into_struct($p, $data, $values, $indexes);
-    xml_parser_free($p);
-    return ['values' => $values, 'indexes' => $indexes];
-}
-
-/**
- * Undocumented function
- *
- * @param array|null $attr
- * @return string
- */
-function htmlAttr(?array $attr)
-{
-    if (!is_array($attr) || count($attr) == 0) {
-        return;
-    }
-
-    $str = '';
-    foreach ($attr as $k => $v) {
-        $str .= ' ' . $k . '="' . $v . '"';
-    }
-
-    return $str;
 }

@@ -13,25 +13,25 @@ class Session
     {
         self::$prefix = $prefix . '_';
         session_start();
-        if (!isset($_COOKIE[SESSION_NAME])) {
+        if (!isset($_COOKIE[getenv('SESSION_NAME')])) {
             self::$sessionId = session_id();
-            $_COOKIE[SESSION_NAME] = self::$sessionId;
+            $_COOKIE[getenv('SESSION_NAME')] = self::$sessionId;
         } else {
-            self::$sessionId = $_COOKIE[SESSION_NAME];
+            self::$sessionId = $_COOKIE[getenv('SESSION_NAME')];
         }
 
-        setcookie(SESSION_NAME, self::$sessionId, time() + SESSION_LIFETIME, '/' . SESSION_NAME);
+        setcookie(getenv('SESSION_NAME'), self::$sessionId, time() + getenv('SESSION_LIFETIME'), '/' . getenv('SESSION_NAME'));
 
-        if (!is_dir(PATH_CACHE)) {
+        if (!is_dir(getenv('PATH_CACHE'))) {
             throw new \Exception('Diretório cache não existe');
         }
 
-        if (!is_readable(PATH_CACHE)) {
+        if (!is_readable(getenv('PATH_CACHE'))) {
             throw new \Exception('Diretório cache não tem permissão de escrita');
         }
 
-        if (!is_file(PATH_CACHE . self::$sessionId . '_session')) {
-            touch(PATH_CACHE . self::$sessionId . '_session');
+        if (!is_file(getenv('PATH_CACHE') . self::$sessionId . '_session')) {
+            touch(getenv('PATH_CACHE') . self::$sessionId . '_session');
         }
 
         self::load();
@@ -66,7 +66,7 @@ class Session
 
     private static function load()
     {
-        $content = file_get_contents(PATH_CACHE . self::$sessionId . '_session');
+        $content = file_get_contents(getenv('PATH_CACHE') . self::$sessionId . '_session');
         if (empty($content)) {
             return;
         }
@@ -75,7 +75,7 @@ class Session
 
     private static function save()
     {
-        file_put_contents(PATH_CACHE . self::$sessionId . '_session', serialize(self::$data));
+        file_put_contents(getenv('PATH_CACHE') . self::$sessionId . '_session', serialize(self::$data));
     }
 
     public static function id()
@@ -85,12 +85,12 @@ class Session
 
     public static function destroy()
     {
-        if (isset($_COOKIE[SESSION_NAME])) {
-            unset($_COOKIE[SESSION_NAME]);
+        if (isset($_COOKIE[getenv('SESSION_NAME')])) {
+            unset($_COOKIE[getenv('SESSION_NAME')]);
         }
-        setcookie(SESSION_NAME, null, -1, '/' . SESSION_NAME);
-        if (is_file(PATH_CACHE . self::$sessionId . '_session')) {
-            unlink(PATH_CACHE . self::$sessionId . '_session');
+        setcookie(getenv('SESSION_NAME'), null, -1, '/' . getenv('SESSION_NAME'));
+        if (is_file(getenv('PATH_CACHE') . self::$sessionId . '_session')) {
+            unlink(getenv('PATH_CACHE') . self::$sessionId . '_session');
         }
     }
 }

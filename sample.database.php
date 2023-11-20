@@ -3,11 +3,11 @@
 return [
     'default' => [
         'driver' => 'pgsql',
-        'host' => 'cadastro_db',
-        'user' => 'cadastro',
-        'pass' => 'Cada@1029',
+        'host' => 'sample.db',
+        'user' => 'sample',
+        'pass' => 'samplepass',
         'port' => 5432,
-        'dbname' => 'cadastro',
+        'dbname' => 'sample',
         'charset' => 'utf8'
     ]
 ];

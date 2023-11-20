@@ -9,16 +9,16 @@ class Cron
 {
     public static function execute($command, $data = [], $debug = false)
     {
-        if (!is_file(PATH_CRON . $command . '.php')) {
+        if (!is_file(getenv('PATH_CRON') . $command . '.php')) {
             throw new Exception('Arquivo de comando não existe');
         }
 
         $token = Strings::token();
 
         if (count($data) > 0) {
-            file_put_contents(PATH_TMP . $token . '.tmp', json_encode($data));
+            file_put_contents(getenv('PATH_TMP') . $token . '.tmp', json_encode($data));
         }
-        $strCommand = '/usr/bin/php ' . PATH_CRON . $command . '.php' .  (count($data) > 0 ? ' "' . $token . '.tmp"' : '') . ' &';
+        $strCommand = '/usr/bin/php ' . getenv('PATH_CRON') . $command . '.php' .  (count($data) > 0 ? ' "' . $token . '.tmp"' : '') . ' &';
         $handle = popen($strCommand, 'r');
         if ($debug) {
             $output = $strCommand . '\n';
@@ -36,7 +36,7 @@ class Cron
 
     public static function close($tmpFile)
     {
-        @unlink(PATH_TMP . $tmpFile);
+        @unlink(getenv('PATH_TMP') . $tmpFile);
     }
 
     public static function isRuning($command)
@@ -51,7 +51,7 @@ class Cron
 
     public static function stop($command)
     {
-        $strCommand = '/usr/bin/pkill -f "' . PATH_CRON . $command . '.php"';
+        $strCommand = '/usr/bin/pkill -f "' . getenv('PATH_CRON') . $command . '.php"';
         $handle = popen($strCommand, 'r');
         pclose($handle);
     }

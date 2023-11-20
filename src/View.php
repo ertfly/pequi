@@ -26,7 +26,7 @@ class View
         foreach ($data as $varName => $varValue) {
             ${$varName} = $varValue;
         }
-        $filename = $this->directory . DS . $file . '.' . $this->fileExtension;
+        $filename = $this->directory . '/' . $file . '.' . $this->fileExtension;
         if (!is_file($filename)) {
             throw new Exception('View ' . $filename . ' is missing');
         }

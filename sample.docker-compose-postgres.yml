@@ -1,17 +1,22 @@
 version: '2'
 services:
-  cadastro:
+  web:
     container_name: nome.instancia
-    image: ertfly/php7.4.9-apache-buster
     build: .
+    env_file:
+      - .env
     restart: always
     ports:
       - '8004:80'
     volumes:
       - ./:/app
+    dns: 
+      - '8.8.8.8'
+      - '8.8.4.4'
     networks:
       - dev-net
-  cadastro-db:
+
+  db:
     container_name: db.nome.instancia
     image: postgres
     restart: always

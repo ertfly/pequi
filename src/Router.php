@@ -19,16 +19,16 @@ class Router
 
     public static function loadHelper()
     {
-        require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Helpers.php';
+        require_once dirname(__FILE__) . '/Helpers.php';
     }
 
     public static function loadSetting()
     {
         if (is_null(self::$settings)) {
-            if (!is_file(PATH_ROOT . 'routes.php')) {
+            if (!is_file(getenv('PATH_ROOT') . 'routes.php')) {
                 throw new Exception('File /routes.php in PATH_ROOT is missing');
             }
-            self::$settings = require_once(PATH_ROOT . 'routes.php');
+            self::$settings = require_once(getenv('PATH_ROOT') . 'routes.php');
         }
         if (isset(self::$settings['version']) && self::$settings['version'] === 2) {
             $settings = [];

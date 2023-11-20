@@ -16,15 +16,15 @@ class SessionApi
         self::$prefix = $prefix . '_';
         self::$sessionId = $sessionId;
 
-        if (!is_dir(PATH_CACHE)) {
+        if (!is_dir(getenv('PATH_CACHE'))) {
             throw new \Exception('Diretório cache não existe');
         }
 
-        if (!is_readable(PATH_CACHE)) {
+        if (!is_readable(getenv('PATH_CACHE'))) {
             throw new \Exception('Diretório cache não tem permissão de escrita');
         }
 
-        if (!is_file(PATH_CACHE . self::$sessionId . '_session')) {
+        if (!is_file(getenv('PATH_CACHE') . self::$sessionId . '_session')) {
             throw new Exception('Session not found');
         }
 
@@ -33,16 +33,16 @@ class SessionApi
 
     public static function create($sessionId)
     {
-        if (is_file(PATH_CACHE . $sessionId . '_session')) {
+        if (is_file(getenv('PATH_CACHE') . $sessionId . '_session')) {
             throw new Exception('Session not create beacause file exists.');
         }
 
-        touch(PATH_CACHE . $sessionId . '_session');
+        touch(getenv('PATH_CACHE') . $sessionId . '_session');
     }
 
     public static function exist($sessionId)
     {
-        if (!is_file(PATH_CACHE . $sessionId . '_session')) {
+        if (!is_file(getenv('PATH_CACHE') . $sessionId . '_session')) {
             return false;
         }
 
@@ -78,7 +78,7 @@ class SessionApi
 
     private static function load()
     {
-        $content = file_get_contents(PATH_CACHE . self::$sessionId . '_session');
+        $content = file_get_contents(getenv('PATH_CACHE') . self::$sessionId . '_session');
         if (empty($content)) {
             return;
         }
@@ -87,7 +87,7 @@ class SessionApi
 
     private static function save()
     {
-        file_put_contents(PATH_CACHE . self::$sessionId . '_session', serialize(self::$data));
+        file_put_contents(getenv('PATH_CACHE') . self::$sessionId . '_session', serialize(self::$data));
     }
 
     public static function id()
@@ -97,8 +97,8 @@ class SessionApi
 
     public static function destroy()
     {
-        if (is_file(PATH_CACHE . self::$sessionId . '_session')) {
-            unlink(PATH_CACHE . self::$sessionId . '_session');
+        if (is_file(getenv('PATH_CACHE') . self::$sessionId . '_session')) {
+            unlink(getenv('PATH_CACHE') . self::$sessionId . '_session');
         }
     }
 }
