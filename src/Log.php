@@ -2,27 +2,32 @@
 
 namespace Pequi;
 
-use Pequi\Tools\Strings;
-
 class Log
 {
-    public static function debug($msg)
+    public static function debug($msg, $name = null)
     {
-        @file_put_contents(PATH_LOGS . 'debug_' . date('Ymd\_His') . '_' . Strings::token() . '.log', $msg);
+        if (is_array($msg)) {
+            $msg = json_encode($msg, JSON_PRETTY_PRINT);
+        }
+        $content = 'DEBUG(' . ($name ? $name . ' ' : '') . date('Y-m-d H:i:s') .  '): ' . $msg . chr(10);
+        @file_put_contents(PATH_LOGS . 'debug_' . date('Ymd') . '.log', $content, FILE_APPEND | LOCK_EX);
     }
 
-    public static function error($msg)
+    public static function error($msg, $name = null)
     {
-        @file_put_contents(PATH_LOGS . 'error_' . date('Ymd\_His') . '_' . Strings::token() . '.log', $msg);
+        if (is_array($msg)) {
+            $msg = json_encode($msg, JSON_PRETTY_PRINT);
+        }
+        $content = 'ERROR(' . ($name ? $name . ' ' : '') . date('Y-m-d H:i:s') .  '): ' . $msg . chr(10);
+        @file_put_contents(PATH_LOGS . 'error_' . date('Ymd') . '.log', $content, FILE_APPEND | LOCK_EX);
     }
 
-    public static function log($msg)
+    public static function log($msg, $name = null)
     {
-        @file_put_contents(PATH_LOGS . 'log_' . date('Ymd\_His') . '_' . Strings::token() . '.log', $msg);
-    }
-
-    public static function user($user, $location, $msg)
-    {
-        @file_put_contents(PATH_LOGS . 'user_' . $user . '_' . $location . '_' . date('Ymd\_His') . '_' . Strings::token() . '.log', $msg);
+        if (is_array($msg)) {
+            $msg = json_encode($msg, JSON_PRETTY_PRINT);
+        }
+        $content = 'LOG(' . ($name ? $name . ' ' : '') . date('Y-m-d H:i:s') .  '): ' . $msg . chr(10);
+        @file_put_contents(PATH_LOGS . 'log_' . date('Ymd') . '.log', $content, FILE_APPEND | LOCK_EX);
     }
 }
